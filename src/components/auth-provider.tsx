@@ -5,12 +5,12 @@ import React, { createContext, useState, useCallback } from 'react';
 
 type User = {
   displayName: string;
-  role: 'user' | 'admin';
+  role: 'admin';
 };
 
 interface AuthContextType {
   user: User | null;
-  login: (role: 'user' | 'admin') => void;
+  login: () => void;
   logout: () => void;
 }
 
@@ -19,12 +19,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = useCallback((role: 'user' | 'admin') => {
-    if (role === 'admin') {
-      setUser({ displayName: 'Admin', role: 'admin' });
-    } else {
-      setUser({ displayName: 'Demo User', role: 'user' });
-    }
+  const login = useCallback(() => {
+    setUser({ displayName: 'Admin', role: 'admin' });
   }, []);
 
   const logout = useCallback(() => {

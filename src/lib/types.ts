@@ -5,14 +5,6 @@ export interface Project {
   repoUrl: string;
 }
 
-export interface Comment {
-  id:string;
-  projectId: string;
-  author: string;
-  text: string;
-  timestamp: string;
-}
-
 export interface Task {
   id: string;
   text: string;
@@ -26,7 +18,7 @@ export interface Checklist {
 
 export interface DeveloperInfo {
     name: string;
-    description: string;
+    description:string;
     techStack: string[];
     links: {
         github: string;

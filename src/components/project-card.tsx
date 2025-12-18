@@ -7,11 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { MessagesSquare, Github } from 'lucide-react';
+import { Github } from 'lucide-react';
 import type { Project } from '@/lib/types';
-import { checklists, comments as allComments } from '@/lib/data';
+import { checklists } from '@/lib/data';
 import { Checklist } from './checklist';
-import { Comments } from './comments';
 
 interface ProjectCardProps {
   project: Project;
@@ -19,7 +18,6 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const projectChecklist = checklists.find((c) => c.projectId === project.id);
-  const projectComments = allComments.filter((c) => c.projectId === project.id);
 
   return (
     <Card className="glass-card flex flex-col h-full overflow-hidden">
@@ -32,7 +30,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </a>
         <CardDescription className="pt-1">{project.description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow grid md:grid-cols-2 gap-px bg-white/20 p-0">
+      <CardContent className="flex-grow grid md:grid-cols-1 gap-px bg-white/20 p-0">
           {projectChecklist ? (
               <div className="bg-card/50">
                 <Checklist initialTasks={projectChecklist.tasks} />
@@ -40,9 +38,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
           ) : (
               <div className="p-6 text-muted-foreground text-center flex items-center justify-center bg-card/50">No checklist for this project.</div>
           )}
-          <div className="bg-card/50">
-            <Comments initialComments={projectComments} projectId={project.id} />
-          </div>
       </CardContent>
     </Card>
   );

@@ -5,13 +5,6 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { User as UserIcon } from 'lucide-react';
 
 const navLinks = [
@@ -52,22 +45,10 @@ export function Header() {
               <Button onClick={logout} variant="ghost" size="sm" className="rounded-full">Logout</Button>
             </div>
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="glass-card rounded-full w-10 h-10">
-                    <UserIcon className="h-5 w-5 text-muted-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="glass-card">
-                <DropdownMenuItem onClick={() => login('user')}>
-                  Login as User
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => login('admin')}>
-                  Login as Admin
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+             <Button onClick={login} variant="ghost" size="sm" className="glass-card rounded-full">
+                <UserIcon className="h-4 w-4 mr-2" />
+                Admin Login
+            </Button>
           )}
         </div>
       </div>

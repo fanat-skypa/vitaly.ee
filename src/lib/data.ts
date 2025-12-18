@@ -1,4 +1,4 @@
-import type { DeveloperInfo, Project, Comment, Checklist } from './types';
+import type { DeveloperInfo, Project, Checklist } from './types';
 
 export const developerInfo: DeveloperInfo = {
   name: 'Alex Doe',
@@ -47,30 +47,6 @@ export const projects: Project[] = [
     name: 'docker-for-devs',
     description: 'A beginner-friendly introduction to Docker for web developers, with practical examples.',
     repoUrl: 'https://github.com/example/docker-for-devs',
-  },
-];
-
-export const comments: Comment[] = [
-  {
-    id: 'c1',
-    projectId: '1',
-    author: 'Jane Smith',
-    text: 'This is a really cool portfolio! Love the clean design.',
-    timestamp: '2023-10-26T10:00:00Z',
-  },
-  {
-    id: 'c2',
-    projectId: '1',
-    author: 'Bob Johnson',
-    text: 'Great use of Next.js Server Components. How did you handle the auth simulation?',
-    timestamp: '2023-10-26T11:30:00Z',
-  },
-  {
-    id: 'c3',
-    projectId: '2',
-    author: 'Alice Williams',
-    text: 'Your guide on React Query is fantastic. It helped me a lot in my current project.',
-    timestamp: '2023-10-25T14:00:00Z',
   },
 ];
 
