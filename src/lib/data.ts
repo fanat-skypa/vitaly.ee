@@ -7,6 +7,7 @@ export const developerInfo: DeveloperInfo = {
   links: {
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
+    x: 'https://x.com',
   },
 };
 

@@ -12,6 +12,8 @@ import type { Task } from '@/lib/types';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { PlusCircle, Trash2, Pencil, Save, X } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+
 
 interface ChecklistProps {
   initialTasks: Task[];
@@ -80,69 +82,76 @@ export function Checklist({ initialTasks }: ChecklistProps) {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <div className="space-y-4 p-4 rounded-lg">
-      <ul className="space-y-3">
-        {tasks.map((task) => (
-          <li key={task.id} className="flex items-center group">
-            {editingTaskId === task.id && isAdmin ? (
-                <div className="flex-grow flex items-center gap-2">
-                    <Input value={editingText} onChange={(e) => setEditingText(e.target.value)} className="h-9"/>
-                    <Button size="icon" variant="ghost" className="h-9 w-9" onClick={() => handleEditSave(task.id)}><Save className="h-4 w-4" /></Button>
-                    <Button size="icon" variant="ghost" className="h-9 w-9" onClick={handleEditCancel}><X className="h-4 w-4" /></Button>
-                </div>
-            ) : (
-                <>
-                    <Checkbox
-                        id={task.id}
-                        checked={task.completed}
-                        onCheckedChange={() => handleToggleTask(task.id)}
-                        disabled={!isAdmin}
-                        className="mr-3"
-                    />
-                    <label
-                        htmlFor={task.id}
-                        className={`flex-grow text-sm ${
-                        task.completed ? 'line-through text-muted-foreground' : ''
-                        }`}
-                    >
-                        {task.text}
-                    </label>
-                    {isAdmin && (
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => handleEditStart(task)}><Pencil className="h-4 w-4"/></Button>
-                            <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleDeleteTask(task.id)}><Trash2 className="h-4 w-4"/></Button>
+    <Card className="h-full bg-transparent border-none shadow-none">
+        <CardHeader>
+            <CardTitle className="font-headline text-lg">Checklist</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <div className="space-y-4 rounded-lg">
+            <ul className="space-y-3">
+                {tasks.map((task) => (
+                <li key={task.id} className="flex items-center group">
+                    {editingTaskId === task.id && isAdmin ? (
+                        <div className="flex-grow flex items-center gap-2">
+                            <Input value={editingText} onChange={(e) => setEditingText(e.target.value)} className="h-9 bg-white/50"/>
+                            <Button size="icon" variant="ghost" className="h-9 w-9" onClick={() => handleEditSave(task.id)}><Save className="h-4 w-4" /></Button>
+                            <Button size="icon" variant="ghost" className="h-9 w-9" onClick={handleEditCancel}><X className="h-4 w-4" /></Button>
                         </div>
+                    ) : (
+                        <>
+                            <Checkbox
+                                id={task.id}
+                                checked={task.completed}
+                                onCheckedChange={() => handleToggleTask(task.id)}
+                                disabled={!isAdmin}
+                                className="mr-3"
+                            />
+                            <label
+                                htmlFor={task.id}
+                                className={`flex-grow text-sm ${
+                                task.completed ? 'line-through text-muted-foreground' : ''
+                                }`}
+                            >
+                                {task.text}
+                            </label>
+                            {isAdmin && (
+                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => handleEditStart(task)}><Pencil className="h-4 w-4"/></Button>
+                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleDeleteTask(task.id)}><Trash2 className="h-4 w-4"/></Button>
+                                </div>
+                            )}
+                        </>
                     )}
-                </>
-            )}
 
-          </li>
-        ))}
-      </ul>
-      {isAdmin && (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleAddTask)}
-            className="flex items-start gap-2 pt-4 border-t"
-          >
-            <FormField
-              control={form.control}
-              name="text"
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormControl>
-                    <Input placeholder="Add a new task..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" size="icon" className="shrink-0">
-              <PlusCircle className="h-4 w-4" />
-            </Button>
-          </form>
-        </Form>
-      )}
-    </div>
+                </li>
+                ))}
+            </ul>
+            {isAdmin && (
+                <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(handleAddTask)}
+                    className="flex items-start gap-2 pt-4 border-t"
+                >
+                    <FormField
+                    control={form.control}
+                    name="text"
+                    render={({ field }) => (
+                        <FormItem className="flex-grow">
+                        <FormControl>
+                            <Input placeholder="Add a new task..." {...field} className="bg-white/50" />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <Button type="submit" size="icon" className="shrink-0">
+                    <PlusCircle className="h-4 w-4" />
+                    </Button>
+                </form>
+                </Form>
+            )}
+            </div>
+        </CardContent>
+    </Card>
   );
 }

@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const formSchema = z.object({
   comment: z
@@ -42,34 +41,29 @@ export function CommentForm({ projectId }: { projectId: string }) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="font-headline">Leave a Comment</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="comment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your comment</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Share your thoughts on this project..."
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Post Comment</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <div className="mt-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="comment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Your comment</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Share your thoughts..."
+                    className="resize-none bg-white/50"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Post Comment</Button>
+        </form>
+      </Form>
+    </div>
   );
 }

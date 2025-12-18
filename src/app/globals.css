@@ -28,7 +28,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -80,5 +80,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);
+  }
+  .dark body {
+    background-image: linear-gradient(to bottom right, #0a192f, #1c3d5a);
+  }
+
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl;
   }
 }

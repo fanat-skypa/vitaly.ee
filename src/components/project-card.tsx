@@ -1,42 +1,49 @@
+'use client';
 import Link from 'next/link';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { MessagesSquare, Github } from 'lucide-react';
 import type { Project } from '@/lib/types';
+import { checklists, comments as allComments } from '@/lib/data';
+import { Checklist } from './checklist';
+import { Comments } from './comments';
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const projectChecklist = checklists.find((c) => c.projectId === project.id);
+  const projectComments = allComments.filter((c) => c.projectId === project.id);
+
   return (
-    <Card className="flex flex-col h-full transition-transform transform hover:-translate-y-1 duration-200 ease-in-out shadow-md hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="font-headline">{project.name}</CardTitle>
-        <CardDescription>{project.description}</CardDescription>
+    <Card className="glass-card flex flex-col h-full overflow-hidden">
+      <CardHeader className="p-6">
+        <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="group">
+          <CardTitle className="font-headline text-2xl group-hover:text-primary transition-colors flex items-center gap-2">
+            {project.name}
+            <Github className="w-5 h-5 opacity-60 group-hover:opacity-100 transition-opacity" />
+          </CardTitle>
+        </a>
+        <CardDescription className="pt-1">{project.description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow" />
-      <CardFooter className="flex justify-between">
-        <Button asChild variant="outline">
-          <Link href={`/projects/${project.id}`}>
-            <MessagesSquare className="mr-2 h-4 w-4" />
-            Comments
-          </Link>
-        </Button>
-        <Button asChild>
-          <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-            <Github className="mr-2 h-4 w-4" />
-            Repository
-          </a>
-        </Button>
-      </CardFooter>
+      <CardContent className="flex-grow grid md:grid-cols-2 gap-px bg-white/20 p-0">
+          {projectChecklist ? (
+              <div className="bg-card/50">
+                <Checklist initialTasks={projectChecklist.tasks} />
+              </div>
+          ) : (
+              <div className="p-6 text-muted-foreground text-center flex items-center justify-center bg-card/50">No checklist for this project.</div>
+          )}
+          <div className="bg-card/50">
+            <Comments initialComments={projectComments} projectId={project.id} />
+          </div>
+      </CardContent>
     </Card>
   );
 }

@@ -31,5 +31,6 @@ export interface DeveloperInfo {
     links: {
         github: string;
         linkedin: string;
+        x: string;
     }
 }

@@ -24,13 +24,13 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased'
+          'min-h-screen font-body antialiased'
         )}
       >
         <AuthProvider>
           <div className="relative flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
               {children}
             </main>
           </div>
