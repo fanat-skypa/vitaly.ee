@@ -1,157 +1,103 @@
 'use client';
 
 import { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import type { Task } from '@/lib/types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/hooks/use-auth';
-import type { Task } from '@/lib/types';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
 import { PlusCircle, Trash2, Pencil, Save, X } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-
+import { useToast } from '@/hooks/use-toast';
 
 interface ChecklistProps {
   initialTasks: Task[];
+  projectId: string;
+  isAdmin: boolean;
+  onTasksChange?: (tasks: Task[]) => void;
 }
 
-const taskSchema = z.object({
-  text: z.string().min(1, 'Task cannot be empty').max(100, 'Task is too long'),
-});
-
-export function Checklist({ initialTasks }: ChecklistProps) {
-  const { user } = useAuth();
+export function Checklist({ initialTasks, isAdmin, onTasksChange }: ChecklistProps) {
   const { toast } = useToast();
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
 
-  const form = useForm<z.infer<typeof taskSchema>>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: { text: '' },
-  });
+  const saveTasks = (newTasks: Task[]) => {
+    setTasks(newTasks);
+    onTasksChange?.(newTasks);
+  };
 
-  const handleAddTask = (values: z.infer<typeof taskSchema>) => {
+  const handleAddTask = () => {
+    if (!editingText.trim()) return;
     const newTask: Task = {
       id: `task-${Date.now()}`,
-      text: values.text,
+      text: editingText.trim(),
       completed: false,
     };
-    setTasks([...tasks, newTask]);
-    form.reset();
-    toast({ title: 'Success', description: 'Task added.' });
+    saveTasks([...tasks, newTask]);
+    setEditingText('');
+    toast({ title: 'Added', description: 'Task added' });
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
-    toast({ title: 'Success', description: 'Task removed.' });
-  };
-
-  const handleToggleTask = (taskId: string) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-  
   const handleEditStart = (task: Task) => {
     setEditingTaskId(task.id);
     setEditingText(task.text);
   };
 
-  const handleEditCancel = () => {
+  const handleEditSave = (taskId: string) => {
+    if (!editingText.trim()) return;
+    saveTasks(tasks.map(t => t.id === taskId ? { ...t, text: editingText } : t));
     setEditingTaskId(null);
     setEditingText('');
   };
 
-  const handleEditSave = (taskId: string) => {
-    if (editingText.trim() === '') {
-        toast({ title: 'Error', description: 'Task cannot be empty.', variant: 'destructive' });
-        return;
-    }
-    setTasks(tasks.map(task => task.id === taskId ? { ...task, text: editingText } : task));
-    handleEditCancel();
-    toast({ title: 'Success', description: 'Task updated.' });
+  const handleToggle = (taskId: string) => {
+    saveTasks(tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t));
   };
 
-  const isAdmin = user?.role === 'admin';
+  const handleDelete = (taskId: string) => {
+    saveTasks(tasks.filter(t => t.id !== taskId));
+  };
 
   return (
-    <Card className="h-full bg-transparent border-none shadow-none">
-        <CardHeader>
-            <CardTitle className="font-headline text-lg">Checklist</CardTitle>
+    <Card className="bg-transparent shadow-none border-none">
+      {tasks.length > 0 && (
+        <CardHeader className="pt-0 pb-1">
+          <CardTitle className="font-headline text-lg">Checklist</CardTitle>
         </CardHeader>
-        <CardContent>
-            <div className="space-y-4 rounded-lg">
-            <ul className="space-y-3">
-                {tasks.map((task) => (
-                <li key={task.id} className="flex items-center group">
-                    {editingTaskId === task.id && isAdmin ? (
-                        <div className="flex-grow flex items-center gap-2">
-                            <Input value={editingText} onChange={(e) => setEditingText(e.target.value)} className="h-9 bg-white/50"/>
-                            <Button size="icon" variant="ghost" className="h-9 w-9" onClick={() => handleEditSave(task.id)}><Save className="h-4 w-4" /></Button>
-                            <Button size="icon" variant="ghost" className="h-9 w-9" onClick={handleEditCancel}><X className="h-4 w-4" /></Button>
-                        </div>
-                    ) : (
-                        <>
-                            <Checkbox
-                                id={task.id}
-                                checked={task.completed}
-                                onCheckedChange={() => handleToggleTask(task.id)}
-                                disabled={!isAdmin}
-                                className="mr-3"
-                            />
-                            <label
-                                htmlFor={task.id}
-                                className={`flex-grow text-sm ${
-                                task.completed ? 'line-through text-muted-foreground' : ''
-                                }`}
-                            >
-                                {task.text}
-                            </label>
-                            {isAdmin && (
-                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => handleEditStart(task)}><Pencil className="h-4 w-4"/></Button>
-                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleDeleteTask(task.id)}><Trash2 className="h-4 w-4"/></Button>
-                                </div>
-                            )}
-                        </>
-                    )}
-
-                </li>
-                ))}
-            </ul>
-            {isAdmin && (
-                <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(handleAddTask)}
-                    className="flex items-start gap-2 pt-4 border-t"
-                >
-                    <FormField
-                    control={form.control}
-                    name="text"
-                    render={({ field }) => (
-                        <FormItem className="flex-grow">
-                        <FormControl>
-                            <Input placeholder="Add a new task..." {...field} className="bg-white/50" />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <Button type="submit" size="icon" className="shrink-0">
-                    <PlusCircle className="h-4 w-4" />
-                    </Button>
-                </form>
-                </Form>
+      )}
+      <CardContent className="space-y-2 pt-1">
+        {tasks.map(task => (
+          <div key={task.id} className="flex items-center justify-between group">
+            {editingTaskId === task.id && isAdmin ? (
+              <div className="flex gap-2 flex-grow items-center">
+                <Input value={editingText} onChange={e => setEditingText(e.target.value)} />
+                <Button size="icon" variant="ghost" onClick={() => handleEditSave(task.id)}><Save /></Button>
+                <Button size="icon" variant="ghost" onClick={() => setEditingTaskId(null)}><X /></Button>
+              </div>
+            ) : (
+              <>
+                <Checkbox id={task.id} checked={task.completed} onCheckedChange={() => handleToggle(task.id)} disabled={!isAdmin} />
+                <span className={`flex-grow ml-2 ${task.completed ? 'text-gray-400 opacity-70' : ''}`}>
+                  {task.text}
+                </span>
+                {isAdmin && (
+                  <div className="flex gap-1 opacity-80">
+                    <Button size="icon" variant="ghost" onClick={() => handleEditStart(task)}><Pencil /></Button>
+                    <Button size="icon" variant="ghost" onClick={() => handleDelete(task.id)}><Trash2 /></Button>
+                  </div>
+                )}
+              </>
             )}
-            </div>
-        </CardContent>
+          </div>
+        ))}
+        {isAdmin && (
+          <div className="flex gap-2 mt-2">
+            <Input value={editingText} onChange={e => setEditingText(e.target.value)} placeholder="New task..." maxLength={100} />
+            <Button onClick={handleAddTask}><PlusCircle /></Button>
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
 }

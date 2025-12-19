@@ -1,81 +1,13 @@
-import type { DeveloperInfo, Project, Checklist } from './types';
+// src/lib/data.ts
+import type { DeveloperInfo } from './types';
 
 export const developerInfo: DeveloperInfo = {
-  name: 'Alex Doe',
-  description: 'Full-stack developer with a passion for building modern web applications and open-source projects.',
-  techStack: ['TypeScript', 'React', 'Next.js', 'Node.js', 'GraphQL', 'PostgreSQL', 'Docker', 'Kubernetes'],
+  name: 'Vitaly',
+  description: 'Q&A Manual + Automation Junior Specialist, Full-Stack Developer, and Designer (a little bit)',
+  techStack: ['TypeScript', 'Next.js', 'PostgreSQL', 'Docker', 'MongoDB', 'Playwright', 'UX|UI Design'],
   links: {
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    x: 'https://x.com',
-  },
+    github: 'https://github.com/fanat-skypa/',
+    linkedin: 'https://www.linkedin.com/in/vitali-logvin-2470392b3/',
+    x: 'https://x.com/wwzhc',
+  },  
 };
-
-export const projects: Project[] = [
-  {
-    id: '1',
-    name: 'devcard-portfolio',
-    description: 'The very portfolio site you are looking at. Built with Next.js, TypeScript, and ShadCN UI.',
-    repoUrl: 'https://github.com/example/devcard-portfolio',
-  },
-  {
-    id: '2',
-    name: 'react-query-essentials',
-    description: 'A comprehensive guide and set of examples for mastering TanStack Query in React applications.',
-    repoUrl: 'https://github.com/example/react-query-essentials',
-  },
-  {
-    id: '3',
-    name: 'node-api-boilerplate',
-    description: 'A scalable and robust boilerplate for building RESTful APIs with Node.js, Express, and TypeScript.',
-    repoUrl: 'https://github.com/example/node-api-boilerplate',
-  },
-  {
-    id: '4',
-    name: 'graphql-server-kit',
-    description: 'Everything you need to get a GraphQL server up and running quickly with Apollo Server and Prisma.',
-    repoUrl: 'https://github.com/example/graphql-server-kit',
-  },
-  {
-    id: '5',
-    name: 'css-in-js-showdown',
-    description: 'A performance comparison between popular CSS-in-JS libraries like Styled Components and Emotion.',
-    repoUrl: 'https://github.com/example/css-in-js-showdown',
-  },
-  {
-    id: '6',
-    name: 'docker-for-devs',
-    description: 'A beginner-friendly introduction to Docker for web developers, with practical examples.',
-    repoUrl: 'https://github.com/example/docker-for-devs',
-  },
-];
-
-export const checklists: Checklist[] = [
-    {
-        projectId: '1',
-        tasks: [
-            { id: 't1-1', text: 'Implement user registration and authentication UI', completed: true },
-            { id: 't1-2', text: 'Create personal CV landing page', completed: true },
-            { id: 't1-3', text: 'Build project showcase with comment system', completed: true },
-            { id: 't1-4', text: 'Develop private checklist feature with admin controls', completed: false },
-            { id: 't1-5', text: 'Deploy to Vercel/Netlify', completed: false },
-        ]
-    },
-    {
-        projectId: '3',
-        tasks: [
-            { id: 't3-1', text: 'Set up Express server with TypeScript', completed: true },
-            { id: 't3-2', text: 'Integrate Prisma for database access', completed: true },
-            { id: 't3-3', text: 'Implement JWT-based authentication middleware', completed: true },
-            { id: 't3-4', text: 'Add comprehensive API documentation with Swagger', completed: false },
-        ]
-    },
-    {
-        projectId: '4',
-        tasks: [
-            { id: 't4-1', text: 'Basic Apollo Server setup', completed: true },
-            { id: 't4-2', text: 'Define GraphQL schema and resolvers', completed: true },
-            { id: 't4-3', text: 'Connect to a database using Prisma ORM', completed: true },
-        ]
-    }
-];

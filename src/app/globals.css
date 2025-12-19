@@ -90,3 +90,33 @@
     @apply bg-card/50 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl;
   }
 }
+
+.hidden { display: none; }
+
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.error { color: red; font-size: 0.9em; }
+

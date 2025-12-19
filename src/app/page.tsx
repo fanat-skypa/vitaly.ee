@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { developerInfo } from '@/lib/data';
 
+
+
 export default function Home() {
   return (
     <div className="flex justify-center items-start pt-8">
